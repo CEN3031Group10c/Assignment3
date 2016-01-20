@@ -1,20 +1,15 @@
 /* Fill out these functions using Mongoose queries*/
 
-var fs = require('fs'),
-    mongoose = require('mongoose'), 
-    Schema = mongoose.Schema, 
+var mongoose = require('mongoose'), 
     Listing = require('./ListingSchema.js'), 
     config = require('./config'),
 	uri = config.db.uri,
-	JSON = require('./listings.json'),
 	listingSchema = mongoose.model('Listing').schema;
 	
 
 mongoose.connect(uri, function(err){
 	if(err)
-		console.log('No');
-	else
-		console.log('yes');
+		console.log('Error: Cannot connect to database');
 
 });
 

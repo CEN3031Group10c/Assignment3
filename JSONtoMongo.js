@@ -15,10 +15,7 @@ var fs = require('fs'),
 /* Connect to your database */
 mongoose.connect(uri, function(err){
 	if(err)
-		console.log('No');
-	else
-		console.log('yes');
-
+		console.log('Error: Cannot connect to database');
 });
 /* 
   Instantiate a mongoose model for each listing object in the JSON file, 
@@ -30,37 +27,27 @@ for(var ent in JSON.entries)
  {
     var val = JSON.entries[ent];
 
-    var lat = "undefined";
-    var long = "undefined";
-    var addr = "undefined";
+	val.coordinates = val.coordinates || {
+		latitude: 0,
+		longitude: 0
+	};
 
-    if(!(val.coordinates === null || val.coordinates === undefined))
-    {
-      lat = val.coordinates.latitude;
-      long = val.coordinates.longitude;
-    }
-
-    if(!(val.address === null || val.address === undefined))
-    {
-      addr = val.address;
-    }
+	val.address = val.address || "None Listed";
 
     var newListing= new Entry({
       code: val.code,
       name: val.name,
       coordinates:{
-        latitude: lat,
-        longitude: long
+        latitude: val.coordinates.latitude,
+        longitude: val.coordinates.longitude
       },
 
-      address: addr
+      address: val.address
     });
 
     newListing.save(function(err){
-      if(err){
-        console.log(err);
-      }
-      console.log('Listing saved');
+      if(err)
+        console.log('Error saving listings');
     });
 
  }
